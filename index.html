@@ -1,5 +1,5 @@
-<html><head><base <script src="estoque-management-script.js" defer></script> href="https://websim.example.com/factory-stock-manager/"><title>Gerenciador de Estoque da Fábrica</title><style>
- {
+<html><head><base href="https://websim.example.com/factory-stock-manager/"><title>Gerenciador de Estoque da Fábrica</title><style>
+body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
@@ -348,7 +348,7 @@ input[type="number"] {
 #lojasTable label {
   margin-right: 10px;
 }
-</style><script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head><>
+</style><script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head><body>
 <div class="app-container">
   <div class="sidebar">
     <h1 class="main-title">Controle de Estoque MK</h1>
@@ -447,9 +447,9 @@ input[type="number"] {
             <th>Dias da Expedição</th>
           </tr>
         </thead>
-        <t>
+        <tbody>
           <!-- Table content will be dynamically added here -->
-        </t>
+        </tbody>
       </table>
     </div>
     <div id="relatorios" class="tab-content">
@@ -506,7 +506,7 @@ input[type="number"] {
             <th>Quantidade</th>
           </tr>
         </thead>
-        <t>
+        <tbody>
           <tr><td>Frango</td><td><input type="number" name="quantidade" id="firstQuantityInput" min="0"></td></tr>
           <tr><td>Português</td><td><input type="number" name="quantidade" min="0"></td></tr>
           <tr><td>Calabresa</td><td><input type="number" name="quantidade" min="0"></td></tr>
@@ -531,7 +531,7 @@ input[type="number"] {
           <tr><td>Smoothie Irado</td><td><input type="number" name="quantidade" min="0"></td></tr>
           <tr><td>Smoothie Daora</td><td><input type="number" name="quantidade" min="0"></td></tr>
           <tr><td>Smoothie Tá Ligado (1 kg)</td><td><input type="number" name="quantidade" min="0"></td></tr>
-        </t>
+        </tbody>
       </table>
       <button type="submit">Adicionar</button>
     </form>
@@ -928,13 +928,13 @@ function updatePrevisaoDisplay() {
 
   for (const [loja, produtos] of Object.entries(filteredPedidos)) {
     previsaoHTML += `<h2>${loja}</h2>`;
-    previsaoHTML += '<table><thead><tr><th>Produto</th><th>Quantidade Média</th></tr></thead><t>';
+    previsaoHTML += '<table><thead><tr><th>Produto</th><th>Quantidade Média</th></tr></thead><tbody>';
     
     for (const [produto, quantidade] of Object.entries(produtos)) {
       previsaoHTML += `<tr><td>${produto}</td><td>${quantidade}</td></tr>`;
     }
     
-    previsaoHTML += '</t></table>';
+    previsaoHTML += '</tbody></table>';
   }
 
   previsaoContent.innerHTML = previsaoHTML;
@@ -1074,8 +1074,8 @@ function renderStockItems() {
 }
 
 function renderLojasTab() {
-  const lojasTable = document.querySelector('#lojasTable t');
-  lojasTable.innerHTML = '';
+  const lojasTableBody = document.querySelector('#lojasTable tbody');
+  lojasTableBody.innerHTML = '';
   
   allLojas.sort().forEach(loja => {
     const row = document.createElement('tr');
@@ -1107,7 +1107,7 @@ function renderLojasTab() {
     });
     row.appendChild(expedicaoCell);
     
-    lojasTable.appendChild(row);
+    lojasTableBody.appendChild(row);
   });
 
   // Populate the searchable dropdown
@@ -1308,7 +1308,7 @@ function renderPedidos2Tab() {
           <th>Estoque Regulador</th>
         </tr>
       </thead>
-      <t>`;
+      <tbody>`;
     for (const [produto, quantidade] of Object.entries(regularProdutos)) {
       const percentage = ((quantidade / totalRegular) * 100).toFixed(2);
       pedidos2HTML += `
@@ -1326,7 +1326,7 @@ function renderPedidos2Tab() {
           <th>100%</th>
           <th>-</th>
         </tr>
-      </t>
+      </tbody>
     </table>`;
 
     // Smoothie produtos table
@@ -1340,7 +1340,7 @@ function renderPedidos2Tab() {
           <th>Estoque Regulador</th>
         </tr>
       </thead>
-      <t>`;
+      <tbody>`;
     for (const [produto, quantidade] of Object.entries(smoothieProdutos)) {
       const percentage = ((quantidade / totalSmoothie) * 100).toFixed(2);
       pedidos2HTML += `
@@ -1358,7 +1358,7 @@ function renderPedidos2Tab() {
           <th>100%</th>
           <th>-</th>
         </tr>
-      </t>
+      </tbody>
     </table>`;
 
     // Total of all produtos
@@ -1381,7 +1381,7 @@ function updateEstoqueRegulador(event) {
   const tables = document.querySelectorAll(`.produtos-table[data-unidade="${unidade}"]`);
   
   tables.forEach(table => {
-    const rows = table.querySelectorAll('t tr:not(:last-child)');
+    const rows = table.querySelectorAll('tbody tr:not(:last-child)');
     rows.forEach(row => {
       const quantidade = parseInt(row.cells[1].textContent);
       const porcentagem = parseFloat(row.cells[2].textContent) / 100;
@@ -1477,7 +1477,7 @@ function populateLojaOptionsFilter(lojas) {
 }
 
 function filterLojasTable(searchTerm) {
-  const rows = document.querySelectorAll('#lojasTable t tr');
+  const rows = document.querySelectorAll('#lojasTable tbody tr');
   rows.forEach(row => {
     const lojaName = row.querySelector('td:first-child').textContent;
     if (lojaName.toLowerCase().includes(searchTerm.toLowerCase())) {
@@ -1640,7 +1640,7 @@ function renderRelatoriosTab() {
 
 function generateEstoqueReport() {
   let reportHTML = '<h2>Relatório de Estoque</h2>';
-  reportHTML += '<table><thead><tr><th>Unidade</th><th>Produto</th><th>Quantidade</th><th>Status do Estoque</th></tr></thead><t>';
+  reportHTML += '<table><thead><tr><th>Unidade</th><th>Produto</th><th>Quantidade</th><th>Status do Estoque</th></tr></thead><tbody>';
   
   // Group by Unidade
   for (const [unidade, produtos] of Object.entries(currentStock)) {
@@ -1661,13 +1661,13 @@ function generateEstoqueReport() {
     }
   }
   
-  reportHTML += '</t></table>';
+  reportHTML += '</tbody></table>';
   document.getElementById('relatorioContent').innerHTML = reportHTML;
 }
 
 function generatePedidosReport() {
   let reportHTML = '<h2>Relatório de Pedidos</h2>';
-  reportHTML += '<table><thead><tr><th>Data</th><th>Loja</th><th>Produto</th><th>Quantidade</th></tr></thead><t>';
+  reportHTML += '<table><thead><tr><th>Data</th><th>Loja</th><th>Produto</th><th>Quantidade</th></tr></thead><tbody>';
   
   stockItems.filter(item => item.isPedido).forEach(pedido => {
     for (const [produto, quantidade] of Object.entries(pedido.produtos)) {
@@ -1675,13 +1675,13 @@ function generatePedidosReport() {
     }
   });
   
-  reportHTML += '</t></table>';
+  reportHTML += '</tbody></table>';
   document.getElementById('relatorioContent').innerHTML = reportHTML;
 }
 
 function generateProducaoReport() {
   let reportHTML = '<h2>Relatório de Produção</h2>';
-  reportHTML += '<table><thead><tr><th>Data</th><th>Unidade</th><th>Produto</th><th>Quantidade</th></tr></thead><t>';
+  reportHTML += '<table><thead><tr><th>Data</th><th>Unidade</th><th>Produto</th><th>Quantidade</th></tr></thead><tbody>';
   
   stockItems.filter(item => item.tipoEntrada === 'Produção/Entrada').forEach(producao => {
     for (const [produto, quantidade] of Object.entries(producao.produtos)) {
@@ -1689,7 +1689,7 @@ function generateProducaoReport() {
     }
   });
   
-  reportHTML += '</t></table>';
+  reportHTML += '</tbody></table>';
   document.getElementById('relatorioContent').innerHTML = reportHTML;
 }
 
@@ -1709,4 +1709,4 @@ function switchTab(tabName) {
   }
 }
 </script>
-</></html>
+</body></html>
